@@ -1,0 +1,33 @@
+{
+  "title": "Gerenciador de Tarefas",
+  "subtitle": "Organize tarefas e acompanhe a execução de uma equipe.",
+  "table": "tarefas",
+  "icon": "✅",
+  "color": "#059669",
+  "fields": [
+    {
+      "name": "titulo",
+      "label": "Título da tarefa",
+      "type": "text",
+      "required": true
+    },
+    {
+      "name": "responsavel",
+      "label": "Responsável",
+      "type": "text",
+      "required": true
+    },
+    {
+      "name": "prazo",
+      "label": "Prazo (AAAA-MM-DD)",
+      "type": "date",
+      "required": true
+    },
+    {
+      "name": "status",
+      "label": "Status",
+      "type": "select:Pendente|Em andamento|Concluída",
+      "required": true
+    }
+  ]
+}

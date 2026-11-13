@@ -1,0 +1,3 @@
+-- Este script é executado apenas ao inicializar um diretório de dados PostgreSQL vazio.
+CREATE TABLE IF NOT EXISTS tarefas (id SERIAL PRIMARY KEY, titulo VARCHAR(180) NOT NULL, responsavel VARCHAR(120) NOT NULL, prazo DATE NOT NULL, status VARCHAR(30) NOT NULL CHECK (status IN ('Pendente','Em andamento','Concluída')), created_at TIMESTAMPTZ NOT NULL DEFAULT NOW());
+INSERT INTO tarefas (titulo,responsavel,prazo,status) VALUES ('Revisar documentação','Marina','2027-03-10','Pendente'),('Testar aplicação','Lucas','2027-03-11','Em andamento'),('Organizar reunião','Pedro','2027-03-12','Concluída');
