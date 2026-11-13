@@ -10,6 +10,13 @@ Projeto 04 da atividade "Projetos com Dockerfile e Docker Compose". O código da
 
 Testado: CRUD completo, os 4 testes do README e persistência com `docker compose down` + `docker compose up -d`.
 
+> [!IMPORTANT]
+> **Avisos que você precisa saber**
+>
+> 1. **O app cai quando o banco reinicia.** É um defeito do código do professor (o mesmo da Prática 1). O `compose.yaml` tem `restart: unless-stopped`, e no teste o Docker religou o app sozinho. É um bom ponto para explicar na apresentação.
+> 2. **A senha do banco é `queridoprofessor`.** Ela aparece duas vezes no `compose.yaml` (`POSTGRES_PASSWORD` e `DB_PASSWORD`). Se trocar, troque nas duas. Se o projeto já subiu antes, o volume guarda a senha antiga: rode `docker compose down -v` (apaga os dados) e depois `docker compose up -d --build`.
+> 3. **O Docker Hub pode bloquear downloads (erro `429`).** Rode `docker compose up -d --build` uma vez em casa antes da aula, para as imagens ficarem salvas no PC.
+
 ## 1. Preparar
 
 No Windows: **Docker Desktop aberto** (com "Engine running") e o **Git Bash**.
