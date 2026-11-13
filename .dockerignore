@@ -1,0 +1,23 @@
+# Dependências: são instaladas dentro da imagem pelo npm install
+node_modules
+npm-debug.log*
+
+# Variáveis locais: no Docker elas vêm do compose.yaml
+.env
+.env.example
+
+# Versionamento e editor
+.git
+.gitignore
+.vscode
+
+# Arquivos de infraestrutura, que não fazem parte da aplicação
+Dockerfile
+.dockerignore
+compose.yaml
+
+# O init.sql é montado no container do PostgreSQL, não na imagem do app
+database
+
+# Documentação
+*.md

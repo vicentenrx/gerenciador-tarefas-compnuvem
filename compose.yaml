@@ -1,0 +1,63 @@
+# Gerenciador de Tarefas: Node.js + PostgreSQL com Docker Compose
+# Subir tudo: docker compose up -d --build
+
+# Nome do projeto: prefixo da rede e do volume (gerenciador-tarefas_...)
+name: gerenciador-tarefas
+
+services:
+  # Banco de dados: imagem oficial do PostgreSQL
+  db:
+    image: postgres:16
+    container_name: tarefas-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: laboratorio
+      POSTGRES_USER: appuser
+      POSTGRES_PASSWORD: queridoprofessor
+    volumes:
+      # Volume nomeado: os dados continuam existindo se o container for removido
+      - dados-tarefas:/var/lib/postgresql/data
+      # Script inicial (tabela + 3 tarefas), somente leitura (:ro);
+      # só roda na primeira vez, com o volume vazio
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    networks:
+      - rede-tarefas
+    # Sem "ports": o banco fica acessível só dentro da rede, não no host
+    healthcheck:
+      # Pronto = aceita conexões TCP na porta 5432
+      test: ["CMD-SHELL", "pg_isready -h localhost -U appuser -d laboratorio"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+  # Aplicação: imagem própria construída pelo Dockerfile desta pasta
+  app:
+    build: .
+    image: gerenciador-tarefas:1.0
+    container_name: tarefas-app
+    restart: unless-stopped
+    environment:
+      PORT: 3000
+      # Nome do serviço do banco, resolvido pelo DNS da rede do Compose
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: laboratorio
+      DB_USER: appuser
+      DB_PASSWORD: queridoprofessor
+    ports:
+      # host:container. Abrir http://localhost:3000
+      - "3000:3000"
+    networks:
+      - rede-tarefas
+    depends_on:
+      # Só inicia o app depois que o healthcheck do banco passar
+      db:
+        condition: service_healthy
+
+networks:
+  rede-tarefas:
+    driver: bridge
+
+volumes:
+  dados-tarefas:
